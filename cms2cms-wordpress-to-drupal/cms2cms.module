@@ -1,0 +1,87 @@
+<?php
+/**
+ * Implements hook_help.
+ *
+ * Displays help and module information.
+ *
+ * @param path
+ *   Which path of the site we're using to display help
+ * @param arg
+ *   Array that holds the current path as returned from arg() function
+ */
+
+require_once(drupal_get_path('module', 'cms2cms') . '/data.php');
+require_once(drupal_get_path('module', 'cms2cms') . '/view.php');
+require_once(drupal_get_path('module', 'cms2cms') . '/ui.php');
+
+function cms2cms_help($path)
+{
+    switch ($path) {
+        case "admin/help#cms2cms":
+            return '<p>' . t("Automated cms migration") . '</p>';
+            break;
+    }
+}
+
+/**
+ * Implements hook_permission().
+ */
+function cms2cms_permission()
+{
+    return array(
+        'administer access control' => array(
+            'title' => t('Access administer control'),
+            'description' => t('Access administer access control'),
+        ),
+    );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function cms2cms_menu()
+{
+    $items = array();
+
+    $items['admin/cms2cms'] = array(
+        'title' => 'CMS2CMS',
+        'description' => 'CMS2CMS menu',
+        'page callback' => 'get_view_content',
+        'type' => MENU_NORMAL_ITEM,
+        'weight' => 11,
+        'access arguments' => array('administer access control'),
+    );
+
+    $items['admin/cms2cms/save-options'] = array(
+        'title' => 'saveOptions',
+        'page callback' => 'cms2cms_save_options',
+        'access arguments' => array('administer access control'),
+    );
+    $items['admin/cms2cms/get-options'] = array(
+        'title' => 'getOptions',
+        'page callback' => 'cms2cms_get_options',
+        'access arguments' => array('administer access control'),
+    );
+
+    return $items;
+}
+
+function cms2cms_save_options()
+{
+    $data = new  CmsPluginData();
+
+    return $data->saveOptions();
+}
+
+function cms2cms_get_options()
+{
+    $data = new  CmsPluginData();
+    die(drupal_json_encode($data->getOptions()));
+}
+
+
+
+
+
+
+

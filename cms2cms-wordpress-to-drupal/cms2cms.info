@@ -1,0 +1,4 @@
+name = CMS2CMS
+description = CMS2CMS is the automated service for content management system data migration.
+core = 7.x
+version = "7.x-1.1"
